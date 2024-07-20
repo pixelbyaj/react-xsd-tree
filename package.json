@@ -22,6 +22,7 @@
     "mui",
     "iso20022"
   ],
+  "license":"MIT",
   "scripts": {
     "build": "tsc && vite build"
   },
