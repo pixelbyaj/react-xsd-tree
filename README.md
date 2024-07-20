@@ -3,9 +3,9 @@
 ![NPM](https://img.shields.io/npm/l/react-xsd-tree)
 [![npm](https://img.shields.io/npm/dm/react-xsd-tree)](https://npmjs.org/package/react-xsd-tree)
 
-## [DEMO](https://stackblitz.com/edit/reactxmlui?file=README.md)
+## [DEMO](https://stackblitz.com/edit/reactxsdtree?file=README.md)
 
-# ReactXmlUI
+# ReactXsdTree
 
 This form is used to design React Material Tree using any given XSD/ISO 20022 Json object. .
 

@@ -1,6 +1,6 @@
 import { TreeViewBaseItem } from "@mui/x-tree-view/models";
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView";
-import React, { SyntheticEvent, useImperativeHandle, useState } from "react";
+import React, { PropsWithoutRef, RefAttributes, SyntheticEvent, useImperativeHandle, useState } from "react";
 import { SchemaElement } from "../models";
 import { useTreeViewApiRef } from "@mui/x-tree-view";
 
@@ -65,7 +65,7 @@ const getObjectProperties = (model: SchemaElement): TreeViewBaseItem[] => {
 };
 
 //React Component
-const ReactXsdTree: React.FC<ReactXsdTreeProps> = React.forwardRef<ReactXsdTreeApiRef, ReactXsdTreeProps>(
+const ReactXsdTree: React.ForwardRefExoticComponent<PropsWithoutRef<ReactXsdTreeProps> & RefAttributes<ReactXsdTreeApiRef>> = React.forwardRef<ReactXsdTreeApiRef, ReactXsdTreeProps>(
   ({ model, onSelectedItemsChange }, ref) => {
     const [xsdJson, setXsdJson] = useState<TreeViewBaseItem[]>([]);
     const apiRef = useTreeViewApiRef();
