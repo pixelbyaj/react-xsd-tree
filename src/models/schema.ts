@@ -1,4 +1,4 @@
-export interface SchemaElement {
+export default interface SchemaElement {
     id: string;
     name: string;
     dataType: string | null;

@@ -1,28 +1,34 @@
 import { TreeViewBaseItem } from "@mui/x-tree-view/models";
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView";
-import React, { SyntheticEvent, useState } from "react";
-import { SchemaElement } from "../models/schema";
+import React, { SyntheticEvent, useImperativeHandle, useState } from "react";
+import { SchemaElement } from "../models";
+import { useTreeViewApiRef } from "@mui/x-tree-view";
 
 const jsonXsdObject = {};
-
-interface XsdJsonProps {
+export interface ReactXsdTreeApiRef {
+  selectItem: (event: React.SyntheticEvent, itemId: string) => void;
+}
+interface ReactXsdTreeProps {
   model: SchemaElement;
-  onSelectedItemsChange?: (event: SyntheticEvent<Element, Event>, item: SchemaElement) => void;
+  onSelectedItemsChange?: (
+    event: SyntheticEvent<Element, Event>,
+    item: SchemaElement
+  ) => void;
 }
 
-const copyAndExculdeProperty = (obj: SchemaElement, property:string) => {
+const copyAndExculdeProperty = (obj: SchemaElement, property: string) => {
   return Object.keys(obj).reduce((acc, key) => {
     if (key !== property) {
       acc[key] = obj[key];
     }
     return acc;
   }, {});
-}
+};
 
 const getTreeViewBaseItem = (model: SchemaElement[]): TreeViewBaseItem[] => {
   const jsonModel: TreeViewBaseItem[] = [];
   model.forEach((item: SchemaElement) => {
-    jsonXsdObject[item.id] = copyAndExculdeProperty(item, 'elements');
+    jsonXsdObject[item.id] = copyAndExculdeProperty(item, "elements");
     if (item.elements.length > 0) {
       const treeViewBaseItem: TreeViewBaseItem = {
         id: item.id,
@@ -59,32 +65,49 @@ const getObjectProperties = (model: SchemaElement): TreeViewBaseItem[] => {
 };
 
 //React Component
-const ReactXsdTree: React.FC<XsdJsonProps> = ({
-  model,
-  onSelectedItemsChange
-}) => {
-  const [xsdJson, setXsdJson] = useState<TreeViewBaseItem[]>([]);
-  
-  const onSelectedItems = (
-    event: SyntheticEvent<Element, Event>,
-    item: string | null
-  ): void => {
-    if (onSelectedItemsChange && typeof onSelectedItemsChange === "function") {
-      onSelectedItemsChange(event, jsonXsdObject[item as string]);
-    }
-  };
+const ReactXsdTree: React.FC<ReactXsdTreeProps> = React.forwardRef<ReactXsdTreeApiRef, ReactXsdTreeProps>(
+  ({ model, onSelectedItemsChange }, ref) => {
+    const [xsdJson, setXsdJson] = useState<TreeViewBaseItem[]>([]);
+    const apiRef = useTreeViewApiRef();
 
-  React.useEffect(() => {
-    const jsonModel = [structuredClone(model)];
-    const jsonTree = getTreeViewBaseItem(jsonModel);
-    setXsdJson(jsonTree);
-  }, [model]);
+    useImperativeHandle(ref, () => ({
+      selectItem: (event: React.SyntheticEvent, itemId: string) => {
+        if (apiRef.current) {
+          apiRef.current.selectItem({ event, itemId });
+          apiRef.current.setItemExpansion(event, itemId, true);
+        }
+      },
+    }));
 
-  return (
-    <>
-      <RichTreeView items={xsdJson} onSelectedItemsChange={onSelectedItems} />
-    </>
-  );
-};
+    const onSelectedItems = (
+      event: SyntheticEvent<Element, Event>,
+      item: string | null
+    ): void => {
+      if (
+        onSelectedItemsChange &&
+        typeof onSelectedItemsChange === "function"
+      ) {
+        onSelectedItemsChange(event, jsonXsdObject[item as string]);
+      }
+    };
+
+    React.useEffect(() => {
+      const jsonModel = [model];
+      const jsonTree = getTreeViewBaseItem(jsonModel);
+      setXsdJson(jsonTree);
+    }, [model]);
+
+    return (
+      <>
+        <RichTreeView
+          apiRef={apiRef}
+          items={xsdJson}
+          onSelectedItemsChange={onSelectedItems}
+          expansionTrigger="iconContainer"
+        />
+      </>
+    );
+  }
+);
 
 export default ReactXsdTree;

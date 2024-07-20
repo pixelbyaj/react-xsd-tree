@@ -1,20 +1,36 @@
 {
   "name": "react-xsd-tree",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "1.0.0-beta.1",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pixelbyaj/react-xsd-tree"
+  },
+  "keywords": [
+    "react",
+    "xsd",
+    "tree",
+    "xsdtotreeview",
+    "react material ui",
+    "mui",
+    "iso20022"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "build": "tsc && vite build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.13",
-    "@mui/icons-material": "^5.16.4",
-    "@mui/material": "^5.16.4",
+    "@mui/icons-material": "^5.16.1",
+    "@mui/material": "^5.16.1",
     "@mui/x-tree-view": "^7.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -29,6 +45,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@types/node": "^20.14.11",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
@@ -37,7 +54,9 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "glob": "^11.0.0",
     "typescript": "^5.2.2",
-    "vite": "^5.3.4"
+    "vite": "^5.3.4",
+    "vite-plugin-dts": "^3.9.1"
   }
 }
